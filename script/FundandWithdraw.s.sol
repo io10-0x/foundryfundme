@@ -28,11 +28,18 @@ contract FundScript is Script {
 
 contract WithdrawScript is Script {
     function withdrawfundmecontract(address mostrecentlydeployed) external {
-        vm.startBroadcast(
-            0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-        );
-        FundMe fundme = FundMe(payable(mostrecentlydeployed));
-        fundme.withdraw();
-        vm.stopBroadcast();
+        if (block.chainid == 31337) {
+            vm.startBroadcast(
+                0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+            );
+            FundMe fundme = FundMe(payable(mostrecentlydeployed));
+            fundme.withdraw();
+            vm.stopBroadcast();
+        } else {
+            vm.startBroadcast();
+            FundMe fundme = FundMe(payable(mostrecentlydeployed));
+            fundme.withdraw();
+            vm.stopBroadcast();
+        }
     }
 }
